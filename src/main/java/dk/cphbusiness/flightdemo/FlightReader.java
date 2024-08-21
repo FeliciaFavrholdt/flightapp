@@ -15,6 +15,9 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static dk.cphbusiness.utils.Utils.getObjectMapper;
 
 /**
  * Purpose:
@@ -25,22 +28,39 @@ public class FlightReader {
 
     public static void main(String[] args) {
         FlightReader flightReader = new FlightReader();
+        List<DTOs.FlightInfo> flightInfoList = null;
         try {
             List<DTOs.FlightDTO> flightList = flightReader.getFlightsFromFile("flights.json");
-            List<DTOs.FlightInfo> flightInfoList = flightReader.getFlightInfoDetails(flightList);
+            flightInfoList = flightReader.getFlightInfoDetails(flightList);
             flightInfoList.forEach(f->{
-                System.out.println("\n"+f);
+                //System.out.println("\n"+f);
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+
+//Task 3: Output list of flights that are operated between two specific airports. For example, all flights between Fukuoka and Haneda Airport
+        System.out.println(flightsBetweenTwoAirports(flightInfoList, "Fukuoka", "Amami"));
+        System.out.println(flightsBetweenTwoAirports(flightInfoList, "King Hussein International", "Queen Alia International"));
+
     }
 
 
-//    public List<FlightDTO> jsonFromFile(String fileName) throws IOException {
-//        List<FlightDTO> flights = getObjectMapper().readValue(Paths.get(fileName).toFile(), List.class);
-//        return flights;
-//    }
+//Task 3: Method to fetch list of flights between two airports
+    private static List<DTOs.FlightInfo> flightsBetweenTwoAirports(List<DTOs.FlightInfo> flightInfoList, String origin, String destination) {
+        List<DTOs.FlightInfo> fetchListOfFlightsBetweenTwoAirports = flightInfoList.stream()
+                .filter(info -> info.getOrigin() != null ? info.getOrigin().equals(origin) && info.getDestination().equals(destination) : false)
+                .toList();
+        return fetchListOfFlightsBetweenTwoAirports;
+    }
+
+
+//       public List<DTOs.FlightDTO> jsonFromFile(String fileName) throws IOException {
+//       List<DTOs.FlightDTO> flights = getObjectMapper().readValue(Paths.get(fileName).toFile(), List.class);
+//       return flights;
+//        }
 
 
     public List<DTOs.FlightInfo> getFlightInfoDetails(List<DTOs.FlightDTO> flightList) {
@@ -61,6 +81,8 @@ public class FlightReader {
         }).toList();
         return flightInfoList;
     }
+
+
 
     public List<DTOs.FlightDTO> getFlightsFromFile(String filename) throws IOException {
         DTOs.FlightDTO[] flights = new Utils().getObjectMapper().readValue(Paths.get(filename).toFile(), DTOs.FlightDTO[].class);
