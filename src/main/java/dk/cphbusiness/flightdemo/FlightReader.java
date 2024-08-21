@@ -25,23 +25,38 @@ public class FlightReader {
 
     public static void main(String[] args) {
         FlightReader flightReader = new FlightReader();
+        List<DTOs.FlightInfo> flightInfoList = null;
         try {
             List<DTOs.FlightDTO> flightList = flightReader.getFlightsFromFile("flights.json");
-            List<DTOs.FlightInfo> flightInfoList = flightReader.getFlightInfoDetails(flightList);
-            flightInfoList.forEach(f->{
-                System.out.println("\n"+f);
+            flightInfoList = flightReader.getFlightInfoDetails(flightList);
+            flightInfoList.forEach(f -> {
+                System.out.println("\n" + f);
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        //Task 7: Output the total flight time for each airline
+        Map<String, Duration> flightTimePerAirline = getFlightTimePerAirline(flightInfoList);
+        flightTimePerAirline.forEach((airline, duration) -> {
+            System.out.println(airline + ": " + duration);
+        });
     }
 
-
-//    public List<FlightDTO> jsonFromFile(String fileName) throws IOException {
-//        List<FlightDTO> flights = getObjectMapper().readValue(Paths.get(fileName).toFile(), List.class);
-//        return flights;
-//    }
-
+    //Task 7: Calculate the total flight time for each airline using streams
+    public static Map<String, Duration> getFlightTimePerAirline(List<DTOs.FlightInfo> flightInfoList) {
+        Map<String, Duration> flightTimePerAirline = flightInfoList.stream()
+                .collect(
+                        HashMap::new,
+                        (map, flightInfo) -> {
+                            Duration duration = map.getOrDefault(flightInfo.getAirline(), Duration.ZERO);
+                            duration = duration.plus(flightInfo.getDuration());
+                            map.put(flightInfo.getAirline(), duration);
+                        },
+                        HashMap::putAll
+                );
+        return flightTimePerAirline;
+    }
 
     public List<DTOs.FlightInfo> getFlightInfoDetails(List<DTOs.FlightDTO> flightList) {
         List<DTOs.FlightInfo> flightInfoList = flightList.stream().map(flight -> {
