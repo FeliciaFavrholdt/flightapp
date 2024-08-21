@@ -1,14 +1,22 @@
-# Start project for code lab in week 1
-This project is meant for being used in the following way:
-- Students group in pairs
-- Each pair of students will join another pair of students to form a group of 4 students
-- Each team of students will fork this project and work on the tasks.
-- Whenever a pair of students has finished a task, they will create a pull request to the repository.
-- The other pair of students will review the pull request and approve it (or ask for changes).
-- The team of students will then merge the pull request.
-- At the end of the day, each team will commit and push a Readme.md file with the names of the students in the team and the tasks they have completed.
+## CODELAB EXERCISE WEEK 34
 
-## How to use this project
-1. In the dk.cphbusiness.flightdemo.FlightReader class, you will find methods to read flight data from a json file into a list of DTO objects.
-2. To see an example of using streams to get info from the collection, look at the dk.cphbusiness.flightdemo.FlightReader.getFlightInfoDetails() method.
-3. In the test package, you will find a test class that tests the FlightReader and FlightWriter classes. Build on this to add more functionality to the FlightReader class. 
+### codelab34-l-2
+
+| PAIR 1 | PAIR 2 |
+|--------|--------|
+|Felicia | Juvena |
+|Jeanette| Fatima |
+
+- We have alternated between the two roles defined below.
+- Pair 1 did not manage to complete all tasks but have focused on learning new git features // push, pull, issues etc. 
+- Pair 2 finished task 1 & 2 (combined) and are awaiting feedback from pair 1's tasks that have been pull requested. 
+
+--------
+
+_The Driver:
+The Driver is the person who actively writes the code. They are responsible for typing and focusing on the tactical aspects of coding, such as syntax, algorithm implementation, and ensuring the code compiles and runs_
+
+_The Navigator:
+The Navigator, on the other hand, takes a more strategic role. They review the code as it’s being written, think about the broader implications, consider potential pitfalls, and suggest improvements or alternative approaches. The Navigator also ensures that the code adheres to best practices and overall design patterns. They might also look ahead to anticipate future tasks or potential challenges._
+
+---------
