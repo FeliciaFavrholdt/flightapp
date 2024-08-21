@@ -36,6 +36,10 @@ public class FlightReader {
         //Task 4: output all flights that leave before 01:00
         System.out.println("Flights that leave before 01:00");
         List<DTOs.FlightInfo> specificTimeFlights = getSpecificTimeFlights(flightInfoList, LocalDateTime.of(2024, 8, 15, 1, 0));
+        //System.out.println(specificTimeFlights);
+
+        //Task 5: output the average flight time for each airline
+        System.out.println("\nAverage flight time for all airlines: " + flightReader.averageFlightTimeForAllAirlines(flightInfoList) + " minutes");
     }
 
     //Task 4: Make a list of flights that leaves before a specific time in the day. For example, all flights that leave before 01:00
@@ -45,6 +49,22 @@ public class FlightReader {
                 .collect(Collectors.toList());
         return ListOfSpecificTimeFlights;
     }
+
+    //Task 5: Calculate the average flight time for each airline
+    public double averageFlightTimeForAllAirlines(List<DTOs.FlightInfo> flightInfoList) {
+        flightInfoList.stream()
+                .filter(info -> info.getAirline() != null) //filter out flights with no airline
+                .collect(Collectors.groupingBy(DTOs.FlightInfo::getAirline, Collectors.averagingLong(info -> info.getDuration().toMinutes())))
+                .forEach((airline, average) -> {
+                    System.out.println("Airline: " + airline + "\nAverage flight time: " + average + " minutes\n");
+                });
+
+        return flightInfoList.stream()
+                .filter(info -> info.getAirline() != null)
+                .collect(Collectors.averagingLong(info -> info.getDuration().toMinutes()));
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public List<DTOs.FlightDTO> jsonFromFile(String fileName) throws IOException {
         List<DTOs.FlightDTO> flights = getObjectMapper().readValue(Paths.get(fileName).toFile(), List.class);
