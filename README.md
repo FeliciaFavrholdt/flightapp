@@ -1,11 +1,11 @@
-## CODELAB EXERCISE WEEK 34
-
-### codelab34-l-2
+## CODELAB EXERCISE WEEK 34 - ### codelab34-l-2
 
 | PAIR 1 | PAIR 2 |
 |--------|--------|
 |Felicia | Juvena |
 |Jeanette| Fatima |
+
+Check Insights to see progress.
 
 - We have alternated between the two roles defined below.
 - Pair 1 did not manage to complete all tasks but have focused on learning new git features // push, pull, issues etc. 
