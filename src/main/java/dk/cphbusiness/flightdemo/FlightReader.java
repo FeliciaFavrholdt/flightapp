@@ -1,20 +1,15 @@
 package dk.cphbusiness.flightdemo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dk.cphbusiness.utils.Utils;
-import lombok.*;
 
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static dk.cphbusiness.utils.Utils.getObjectMapper;
 
 /**
  * Purpose:
@@ -25,23 +20,36 @@ public class FlightReader {
 
     public static void main(String[] args) {
         FlightReader flightReader = new FlightReader();
+        List<DTOs.FlightInfo> flightInfoList = null;
+
         try {
             List<DTOs.FlightDTO> flightList = flightReader.getFlightsFromFile("flights.json");
-            List<DTOs.FlightInfo> flightInfoList = flightReader.getFlightInfoDetails(flightList);
-            flightInfoList.forEach(f->{
+            flightInfoList = flightReader.getFlightInfoDetails(flightList);
+            /*flightInfoList.forEach(f->{
                 System.out.println("\n"+f);
-            });
+            });*/
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        //Task 4: output all flights that leave before 01:00
+        System.out.println("Flights that leave before 01:00");
+        List<DTOs.FlightInfo> specificTimeFlights = getSpecificTimeFlights(flightInfoList, LocalDateTime.of(2024, 8, 15, 1, 0));
     }
 
+    //Task 4: Make a list of flights that leaves before a specific time in the day. For example, all flights that leave before 01:00
+    public static List<DTOs.FlightInfo> getSpecificTimeFlights(List<DTOs.FlightInfo> flightInfoList, LocalDateTime time) {
+        List<DTOs.FlightInfo> ListOfSpecificTimeFlights = flightInfoList.stream()
+                .filter(info -> info.getDeparture() != null && info.getDeparture().isBefore(time))
+                .collect(Collectors.toList());
+        return ListOfSpecificTimeFlights;
+    }
 
-//    public List<FlightDTO> jsonFromFile(String fileName) throws IOException {
-//        List<FlightDTO> flights = getObjectMapper().readValue(Paths.get(fileName).toFile(), List.class);
-//        return flights;
-//    }
-
+    public List<DTOs.FlightDTO> jsonFromFile(String fileName) throws IOException {
+        List<DTOs.FlightDTO> flights = getObjectMapper().readValue(Paths.get(fileName).toFile(), List.class);
+        return flights;
+    }
 
     public List<DTOs.FlightInfo> getFlightInfoDetails(List<DTOs.FlightDTO> flightList) {
         List<DTOs.FlightInfo> flightInfoList = flightList.stream().map(flight -> {
@@ -68,6 +76,5 @@ public class FlightReader {
         List<DTOs.FlightDTO> flightList = Arrays.stream(flights).toList();
         return flightList;
     }
-
 
 }
