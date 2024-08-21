@@ -15,6 +15,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Purpose:
@@ -31,6 +32,11 @@ public class FlightReader {
             flightInfoList.forEach(f->{
                 System.out.println("\n"+f);
             });
+            double avgFlightTime = flightReader.averageFlightTimeForAirline("Lufthansa",flightInfoList);
+            System.out.println("\n" + "Average flight time for Lufthansa flights: " + avgFlightTime + " minutes");
+
+            double totalFLightTime = flightReader.totalFlightTimeForAirline("Lufthansa",flightInfoList);
+            System.out.println("\n" + "Total flight time for Lufthansa: " + totalFLightTime + " minutes");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,6 +73,16 @@ public class FlightReader {
 
         List<DTOs.FlightDTO> flightList = Arrays.stream(flights).toList();
         return flightList;
+    }
+
+    // Task 1.1: Add a new feature (e.g. calculate the average flight time for a specific airline.
+    // For example, calculate the average flight time for all flights operated by Lufthansa)
+    public Double averageFlightTimeForAirline (String airlineName, List<DTOs.FlightInfo> flightList){
+        double averageFlightTime = flightList.stream()
+                .filter(flight ->  flight.getAirline() != null ? flight.getAirline().equals(airlineName) : false)
+                .collect(Collectors.averagingDouble(info -> info.getDuration().toMinutes()));
+
+        return averageFlightTime;
     }
 
 
