@@ -47,7 +47,7 @@ public class FlightReader {
 
     }
 
-    
+
 //Task 3: Method to fetch list of flights between two airports
     private static List<DTOs.FlightInfo> flightsBetweenTwoAirports(List<DTOs.FlightInfo> flightInfoList, String origin, String destination) {
         List<DTOs.FlightInfo> fetchListOfFlightsBetweenTwoAirports = flightInfoList.stream()
